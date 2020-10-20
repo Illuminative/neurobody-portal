@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/neurobody-portal/precache-manifest.6658355743651b8d678ea5c687729c7d.js"
+  "/neurobody-portal/precache-manifest.1c21d80c63baa8f9311d8093ba931ce3.js"
 );
 
 self.addEventListener('message', (event) => {

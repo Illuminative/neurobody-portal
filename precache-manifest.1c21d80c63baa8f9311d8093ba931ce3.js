@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "bebabf53fcb52038370249864528c9fb",
+    "revision": "53f0a7788b28849fff28a407ac114ffc",
     "url": "/neurobody-portal/index.html"
   },
   {
-    "revision": "da0eb4fcb170a55cae6c",
+    "revision": "124c94068fd19ae5206f",
     "url": "/neurobody-portal/static/css/main.5ecd60fb.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/neurobody-portal/static/js/2.40c62e32.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "da0eb4fcb170a55cae6c",
-    "url": "/neurobody-portal/static/js/main.8f48e843.chunk.js"
+    "revision": "124c94068fd19ae5206f",
+    "url": "/neurobody-portal/static/js/main.ffef1aa6.chunk.js"
   },
   {
     "revision": "b2c186e88fe693c798ec",
