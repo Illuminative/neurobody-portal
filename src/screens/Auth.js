@@ -39,7 +39,7 @@ const Auth = (props) => {
       const expiry = localStorage.getItem("tokenExpiry");
       if (expiry) {
         if (expiry > new Date().getMilliseconds()) {
-          props.history.push("/exercises");
+          props.history.push(process.env.PUBLIC_URL + "/exercises");
         } else {
           removeStorage();
         }
@@ -84,7 +84,7 @@ const Auth = (props) => {
                 );
                 localStorage.setItem("userId", data.localId);
                 console.log("Success");
-                props.history.push("/exercises");
+                props.history.push(process.env.PUBLIC_URL + "/exercises");
               } else {
                 setIsLoading(false);
                 setError(

@@ -278,7 +278,7 @@ const ExerciseDetail = (props) => {
       .put(`${config.databaseURL}/exercises/${exerciseTag}.json`, exercise)
       .then((res) => {
         console.log(res);
-        props.history.push("/exercises");
+        props.history.push(process.env.PUBLIC_URL + "/exercises");
       });
   };
 
@@ -287,7 +287,7 @@ const ExerciseDetail = (props) => {
       .delete(`${config.databaseURL}/exercises/${exerciseTag}.json`)
       .then((res) => {
         console.log(res);
-        props.history.push("/exercises");
+        props.history.push(process.env.PUBLIC_URL + "/exercises");
       });
   };
 
@@ -312,7 +312,7 @@ const ExerciseDetail = (props) => {
   };
 
   const toLibrary = () => {
-    props.history.push("/exercises");
+    props.history.push(process.env.PUBLIC_URL + "/exercises");
   };
 
   return (
