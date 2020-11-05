@@ -2,20 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { ThemeProvider as MultiThemeProvider } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Button,
-  Select,
-  InputLabel,
-  MenuItem,
-  Card,
-  CardContent,
-  CardHeader,
-  Grid,
-  TextField,
-  CircularProgress,
-  GridList,
-  GridListTile,
-} from "@material-ui/core";
+import { Button, Card, CardContent, Grid, TextField } from "@material-ui/core";
 
 import theme from "../styles/theme";
 import { Header } from "../components/Header";
@@ -70,11 +57,13 @@ const ExerciseDetail = (props) => {
         if (res.data.engages.isometric)
           setEngageIsometric(res.data.engages.isometric);
 
+        console.log(res.data.variants);
+
         if (res.data.variants) {
-          if (res.data.variants.lessDifficult);
-          setLessDifficult(res.data.variants.lessDifficult);
-          if (res.data.variants.moreDifficult);
-          setMoreDifficult(res.data.variants.moreDifficult);
+          if (res.data.variants.lessDifficult)
+            setLessDifficult(res.data.variants.lessDifficult);
+          if (res.data.variants.moreDifficult)
+            setMoreDifficult(res.data.variants.moreDifficult);
         }
 
         setNewExercise(false);
@@ -141,6 +130,8 @@ const ExerciseDetail = (props) => {
         more[index] = e.target.value;
         setMoreDifficult(more);
         break;
+      default:
+        break;
     }
   };
 
@@ -180,6 +171,8 @@ const ExerciseDetail = (props) => {
         break;
       case "More Difficult Variant(s)":
         setMoreDifficult((prevstate) => [...prevstate, ""]);
+        break;
+      default:
         break;
     }
   };
@@ -249,6 +242,8 @@ const ExerciseDetail = (props) => {
           more.pop();
           setMoreDifficult(more);
         }
+        break;
+      default:
         break;
     }
   };

@@ -5,10 +5,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
   Button,
   Grid,
-  CircularProgress,
   GridList,
   GridListTile,
-  Checkbox,
+  TextField,
 } from "@material-ui/core";
 import theme from "../styles/theme";
 import { Header } from "../components/Header";
@@ -19,12 +18,11 @@ import axios from "axios";
 import { config } from "../firebaseConfig";
 
 const ExerciseLibrary = (props) => {
-  const classes = useStyles();
-
   const [exercises, setExercises] = useState(null);
   const [filteredExercises, setFilteredExercises] = useState(null);
   const [tags, setTags] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [nameSearch, setNameSearch] = useState("");
 
   useEffect(() => {
     axios.get(`${config.databaseURL}/exercises.json`).then((res) => {
@@ -53,7 +51,7 @@ const ExerciseLibrary = (props) => {
 
   useEffect(() => {
     searchExercises();
-  }, [selectedTags]);
+  }, [selectedTags, nameSearch]);
 
   const onSelectExerciseHandler = (tag) => {
     const queryParam = encodeURIComponent("tag");
@@ -83,7 +81,7 @@ const ExerciseLibrary = (props) => {
     const exers = [...exercises];
     console.log(selectedTags);
 
-    if (selectedTags.length <= 0) {
+    if (selectedTags.length <= 0 && nameSearch === "") {
       setFilteredExercises(exers);
       return;
     }
@@ -93,15 +91,29 @@ const ExerciseLibrary = (props) => {
     exers.forEach((ex) => {
       let tagCount = 0;
 
-      selectedTags.forEach((tag) => {
-        if (ex.tags && ex.tags.includes(tag)) {
-          tagCount++;
-          ex.tagCount = tagCount;
-        }
-      });
+      if (selectedTags.length > 0) {
+        selectedTags.forEach((tag) => {
+          if (ex.tags && ex.tags.includes(tag)) {
+            if (nameSearch === "") {
+              tagCount++;
+              ex.tagCount = tagCount;
+            } else {
+              if (ex.ExerciseName.includes(nameSearch)) {
+                tagCount++;
+                ex.tagCount = tagCount;
+              }
+            }
+          }
+        });
 
-      if (tagCount > 0) {
-        resultExercs.push(ex);
+        if (tagCount > 0) {
+          resultExercs.push(ex);
+        }
+      } else {
+        console.log(ex.ExerciseName);
+        if (ex.ExerciseName.toLowerCase().includes(nameSearch.toLowerCase())) {
+          resultExercs.push(ex);
+        }
       }
     });
 
@@ -118,10 +130,16 @@ const ExerciseLibrary = (props) => {
 
   const clearFilterHandler = () => {
     setSelectedTags([]);
+    setNameSearch("");
   };
 
   const toAddExercise = () => {
     props.history.push(process.env.PUBLIC_URL + `/exercise`);
+  };
+
+  const searchChangeHandler = (e) => {
+    const search = e.target.value;
+    setNameSearch(search);
   };
 
   return (
@@ -131,6 +149,12 @@ const ExerciseLibrary = (props) => {
         <Grid item lg={10}>
           <Button onClick={toAddExercise}>Add Exercise</Button>
           <Button onClick={clearFilterHandler}>Clear Filters</Button>
+          <TextField
+            style={{ marginLeft: "20px" }}
+            placeholder='Search By Name'
+            value={nameSearch}
+            onChange={searchChangeHandler}
+          />
         </Grid>
       </Grid>
       <Grid container justify='center'>
