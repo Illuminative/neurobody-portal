@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/neurobody-portal/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/neurobody-portal/static/js/main.2e0fbd7e.chunk.js",
-    "main.js.map": "/neurobody-portal/static/js/main.2e0fbd7e.chunk.js.map",
+    "main.css": "/neurobody-portal/static/css/main.69eda509.chunk.css",
+    "main.js": "/neurobody-portal/static/js/main.06f34b7b.chunk.js",
+    "main.js.map": "/neurobody-portal/static/js/main.06f34b7b.chunk.js.map",
     "runtime-main.js": "/neurobody-portal/static/js/runtime-main.a6a927c5.js",
     "runtime-main.js.map": "/neurobody-portal/static/js/runtime-main.a6a927c5.js.map",
-    "static/js/2.40c62e32.chunk.js": "/neurobody-portal/static/js/2.40c62e32.chunk.js",
-    "static/js/2.40c62e32.chunk.js.map": "/neurobody-portal/static/js/2.40c62e32.chunk.js.map",
+    "static/js/2.fa42b976.chunk.js": "/neurobody-portal/static/js/2.fa42b976.chunk.js",
+    "static/js/2.fa42b976.chunk.js.map": "/neurobody-portal/static/js/2.fa42b976.chunk.js.map",
     "index.html": "/neurobody-portal/index.html",
-    "precache-manifest.9fd36e3aba3c95efe8b64055f21cc189.js": "/neurobody-portal/precache-manifest.9fd36e3aba3c95efe8b64055f21cc189.js",
+    "precache-manifest.9c44ea7cb5834c08f6113e90505e047a.js": "/neurobody-portal/precache-manifest.9c44ea7cb5834c08f6113e90505e047a.js",
     "service-worker.js": "/neurobody-portal/service-worker.js",
-    "static/css/main.5ecd60fb.chunk.css.map": "/neurobody-portal/static/css/main.5ecd60fb.chunk.css.map",
-    "static/js/2.40c62e32.chunk.js.LICENSE.txt": "/neurobody-portal/static/js/2.40c62e32.chunk.js.LICENSE.txt",
+    "static/css/main.69eda509.chunk.css.map": "/neurobody-portal/static/css/main.69eda509.chunk.css.map",
+    "static/js/2.fa42b976.chunk.js.LICENSE.txt": "/neurobody-portal/static/js/2.fa42b976.chunk.js.LICENSE.txt",
     "static/media/neuroOrangeLogo.png": "/neurobody-portal/static/media/neuroOrangeLogo.b723508c.png"
   },
   "entrypoints": [
     "static/js/runtime-main.a6a927c5.js",
-    "static/js/2.40c62e32.chunk.js",
-    "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.2e0fbd7e.chunk.js"
+    "static/js/2.fa42b976.chunk.js",
+    "static/css/main.69eda509.chunk.css",
+    "static/js/main.06f34b7b.chunk.js"
   ]
 }
