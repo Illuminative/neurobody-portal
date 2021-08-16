@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { ThemeProvider as MultiThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,6 +18,13 @@ const WorkoutCard = props => {
 						<Button
 							variant="contained"
 							color="primary"
+							onClick={() => props.onViewWorkout(props.workout)}
+						>
+							View Workout
+						</Button>
+						<Button
+							variant="contained"
+							color="secondary"
 							onClick={() => props.onDeleteWorkout(props.workout.id)}
 						>
 							Delete Workout

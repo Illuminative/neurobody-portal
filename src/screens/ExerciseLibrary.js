@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-import { ThemeProvider as MultiThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Grid, GridList, GridListTile, TextField } from '@material-ui/core';
-import theme from '../styles/theme';
 import { Header } from '../components/Header';
 import ExerciseCard from '../components/ExerciseCard';
 import TagToggle from '../components/TagToggle';
@@ -31,6 +29,8 @@ const ExerciseLibrary = props => {
 	const [tags, setTags] = useState(null);
 	const [selectedTags, setSelectedTags] = useState([]);
 	const [selectedWorkoutExercises, setSelectedWorkoutExercises] = useState([]);
+	const [selectedViewWorkout, setSelectedViewWorkout] = useState(null);
+	const [viewWorkoutExercises, setViewWorkoutExercises] = useState([]);
 	const [nameSearch, setNameSearch] = useState('');
 	const [workoutName, setWorkoutName] = useState('');
 	const [workoutSelected, setWorkoutSelected] = useState(null);
@@ -113,10 +113,6 @@ const ExerciseLibrary = props => {
 		});
 	}, []);
 
-	useEffect(() => {
-		searchExercises();
-	}, [selectedTags, nameSearch]);
-
 	const onSelectExerciseHandler = tag => {
 		const queryParam = encodeURIComponent('tag');
 		const tagQuery = encodeURIComponent(tag);
@@ -176,7 +172,7 @@ const ExerciseLibrary = props => {
 		}
 	};
 
-	const searchExercises = () => {
+	const searchExercises = useCallback(() => {
 		if (!exercises) return;
 
 		const exers = [...exercises];
@@ -211,19 +207,16 @@ const ExerciseLibrary = props => {
 					resultExercs.push(ex);
 				}
 			} else {
-				console.log(ex.ExerciseName);
 				if (ex.ExerciseName.toLowerCase().includes(nameSearch.toLowerCase())) {
 					resultExercs.push(ex);
 				}
 			}
 		});
 
-		console.log(resultExercs);
-
 		resultExercs.sort((a, b) => b.tagCount - a.tagCount);
 
 		setFilteredExercises([...resultExercs]);
-	};
+	}, [exercises, nameSearch, selectedTags]);
 
 	const isWorkoutSelected = exerciseId => {
 		return selectedWorkoutExercises.findIndex(workoutExer => workoutExer.id === exerciseId);
@@ -247,8 +240,31 @@ const ExerciseLibrary = props => {
 		setNameSearch(search);
 	};
 
+	const displayExercises = useCallback(() => {
+		if (selectedViewWorkout) {
+			const exercisesInWorkout = [];
+
+			selectedViewWorkout.exercises.forEach(exer => {
+				const foundExercise = exercises.find(e => e.id === exer);
+				if (foundExercise) {
+					exercisesInWorkout.push(foundExercise);
+				}
+			});
+
+			setViewWorkoutExercises(exercisesInWorkout);
+		}
+	}, [selectedViewWorkout, exercises]);
+
+	useEffect(() => {
+		searchExercises();
+	}, [selectedTags, nameSearch, searchExercises]);
+
+	useEffect(() => {
+		displayExercises();
+	}, [selectedViewWorkout, displayExercises]);
+
 	return (
-		<MultiThemeProvider theme={theme}>
+		<>
 			<Header
 				title="Exercise Library"
 				content={
@@ -366,6 +382,7 @@ const ExerciseLibrary = props => {
 									<WorkoutCard
 										workout={workout}
 										onDeleteWorkout={handleOpenDelete}
+										onViewWorkout={workout => setSelectedViewWorkout(workout)}
 									/>
 								</GridListTile>
 							))}
@@ -398,7 +415,6 @@ const ExerciseLibrary = props => {
 					</Button>
 				</DialogActions>
 			</Dialog>
-
 			<Dialog
 				open={deleteOpen}
 				onClose={handleDeleteClose}
@@ -417,7 +433,28 @@ const ExerciseLibrary = props => {
 					</Button>
 				</DialogActions>
 			</Dialog>
-		</MultiThemeProvider>
+			<Dialog
+				open={selectedViewWorkout !== null}
+				onClose={() => setSelectedViewWorkout(null)}
+				aria-labelledby="form-dialog-title"
+			>
+				<DialogTitle id="form-dialog-title">
+					{selectedViewWorkout ? selectedViewWorkout.name : ''}
+				</DialogTitle>
+				<DialogContent>
+					<ol>
+						{viewWorkoutExercises.map((workoutExer, index) => {
+							return <li>{workoutExer.ExerciseName}</li>;
+						})}
+					</ol>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={() => setSelectedViewWorkout(null)} color="primary">
+						Close
+					</Button>
+				</DialogActions>
+			</Dialog>
+		</>
 	);
 };
 
