@@ -15,10 +15,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import TabPanel from '../components/TabPanel';
+import Workouts from '../screens/Workouts';
 
 import axios from 'axios';
 import { config } from '../firebaseConfig';
-import WorkoutCard from '../components/WorkoutCard';
 
 const ExerciseLibrary = props => {
 	const classes = useStyles();
@@ -29,13 +29,9 @@ const ExerciseLibrary = props => {
 	const [tags, setTags] = useState(null);
 	const [selectedTags, setSelectedTags] = useState([]);
 	const [selectedWorkoutExercises, setSelectedWorkoutExercises] = useState([]);
-	const [selectedViewWorkout, setSelectedViewWorkout] = useState(null);
-	const [viewWorkoutExercises, setViewWorkoutExercises] = useState([]);
 	const [nameSearch, setNameSearch] = useState('');
 	const [workoutName, setWorkoutName] = useState('');
-	const [workoutSelected, setWorkoutSelected] = useState(null);
 	const [open, setOpen] = useState(false);
-	const [deleteOpen, setDeleteOpen] = useState(false);
 	const [tabValue, setTabValue] = useState(0);
 
 	const handleClickOpen = () => {
@@ -47,33 +43,8 @@ const ExerciseLibrary = props => {
 		setOpen(false);
 	};
 
-	const handleDeleteClose = () => {
-		setDeleteOpen(false);
-	};
-
 	const handleTabChange = (event, newValue) => {
 		setTabValue(newValue);
-	};
-
-	const handleOpenDelete = workoutId => {
-		setWorkoutSelected(workoutId);
-		setDeleteOpen(true);
-	};
-
-	const handleConfirmDelete = () => {
-		axios
-			.delete(`${config.databaseURL}/workouts/${workoutSelected}.json`)
-			.then(res => {
-				const newWorkouts = workouts.filter(workout => workout.id !== workoutSelected);
-
-				setWorkouts(newWorkouts);
-				setWorkoutSelected(null);
-				handleDeleteClose();
-			})
-			.catch(err => {
-				console.log(err);
-				handleDeleteClose();
-			});
 	};
 
 	useEffect(() => {
@@ -239,29 +210,9 @@ const ExerciseLibrary = props => {
 		const search = e.target.value;
 		setNameSearch(search);
 	};
-
-	const displayExercises = useCallback(() => {
-		if (selectedViewWorkout) {
-			const exercisesInWorkout = [];
-
-			selectedViewWorkout.exercises.forEach(exer => {
-				const foundExercise = exercises.find(e => e.id === exer);
-				if (foundExercise) {
-					exercisesInWorkout.push(foundExercise);
-				}
-			});
-
-			setViewWorkoutExercises(exercisesInWorkout);
-		}
-	}, [selectedViewWorkout, exercises]);
-
 	useEffect(() => {
 		searchExercises();
 	}, [selectedTags, nameSearch, searchExercises]);
-
-	useEffect(() => {
-		displayExercises();
-	}, [selectedViewWorkout, displayExercises]);
 
 	return (
 		<>
@@ -315,9 +266,9 @@ const ExerciseLibrary = props => {
 								</Grid>
 							</Grid>
 							<Grid container spacing={2}>
-								{selectedWorkoutExercises.map(workoutExercise => {
+								{selectedWorkoutExercises.map((workoutExercise, index) => {
 									return (
-										<Grid item>
+										<Grid item key={workoutExercise.ExerciseName + index}>
 											<div
 												style={{
 													border: '1px solid black',
@@ -371,24 +322,13 @@ const ExerciseLibrary = props => {
 				</Grid>
 			</TabPanel>
 			<TabPanel value={tabValue} index={1}>
-				<Grid container justify="center" className={classes.spacing}>
-					<Grid item lg={10}>
-						<h1>Workouts</h1>
-					</Grid>
-					<Grid item lg={10}>
-						<GridList cellHeight={'auto'} spacing={20} cols={3}>
-							{workouts.map(workout => (
-								<GridListTile key={workout.id} cols={1}>
-									<WorkoutCard
-										workout={workout}
-										onDeleteWorkout={handleOpenDelete}
-										onViewWorkout={workout => setSelectedViewWorkout(workout)}
-									/>
-								</GridListTile>
-							))}
-						</GridList>
-					</Grid>
-				</Grid>
+				<div className={classes.spacing}>
+					<Workouts
+						workouts={workouts}
+						onWorkoutsChanged={newWorkouts => setWorkouts(newWorkouts)}
+						exercises={exercises}
+					/>
+				</div>
 			</TabPanel>
 
 			<Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -412,45 +352,6 @@ const ExerciseLibrary = props => {
 					</Button>
 					<Button onClick={createWorkoutHandler} color="primary">
 						Create
-					</Button>
-				</DialogActions>
-			</Dialog>
-			<Dialog
-				open={deleteOpen}
-				onClose={handleDeleteClose}
-				aria-labelledby="form-dialog-title"
-			>
-				<DialogTitle id="form-dialog-title">Delete Workout</DialogTitle>
-				<DialogContent>
-					<DialogContentText>Do you want to delete workout?.</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleDeleteClose} color="primary">
-						Cancel
-					</Button>
-					<Button onClick={handleConfirmDelete} color="secondary">
-						Delete
-					</Button>
-				</DialogActions>
-			</Dialog>
-			<Dialog
-				open={selectedViewWorkout !== null}
-				onClose={() => setSelectedViewWorkout(null)}
-				aria-labelledby="form-dialog-title"
-			>
-				<DialogTitle id="form-dialog-title">
-					{selectedViewWorkout ? selectedViewWorkout.name : ''}
-				</DialogTitle>
-				<DialogContent>
-					<ol>
-						{viewWorkoutExercises.map((workoutExer, index) => {
-							return <li>{workoutExer.ExerciseName}</li>;
-						})}
-					</ol>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={() => setSelectedViewWorkout(null)} color="primary">
-						Close
 					</Button>
 				</DialogActions>
 			</Dialog>
